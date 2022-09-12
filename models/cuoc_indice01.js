@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 
-
-const schema = new mongoose.Schema({
+const indiceSchema = new mongoose.Schema({
   cod_indice: {
     type: String,
     required: true,
@@ -36,12 +35,27 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // ocupacion: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'cuoc_ocupacion02'
-  // }
 });
 
-schema.plugin(uniqueValidator);
+indiceSchema.virtual('ocupacion', {
+  ref: 'cuoc_ocupacion02',
+  localField: 'cod_indice',
+  foreignField: 'cod_indice',
+  justOne: true,
+})
 
-export default mongoose.model('cuoc_indice01', schema);
+indiceSchema.virtual('conocimientos', {
+  ref: 'cuoc_conocimeiento05',
+  localField: 'cod_indice',
+  foreignField: 'ocupacion',
+})
+
+indiceSchema.virtual('denominaciones', {
+  ref: 'cuoc_denominaciones03',
+  localField: 'cod_indice',
+  foreignField: 'ocupacion',
+})
+
+indiceSchema.plugin(uniqueValidator);
+
+export default mongoose.model('cuoc_indice01', indiceSchema);
