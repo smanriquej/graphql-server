@@ -56,6 +56,12 @@ indiceSchema.virtual('denominaciones', {
   foreignField: 'ocupacion',
 })
 
+indiceSchema.virtual('funciones', {
+  ref: 'cuoc_funciones04',
+  localField: 'cod_indice',
+  foreignField: 'ocupacion',
+})
+
 indiceSchema.plugin(uniqueValidator);
 
 export default mongoose.model('cuoc_indice01', indiceSchema);

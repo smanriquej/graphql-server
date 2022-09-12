@@ -2,6 +2,7 @@ import Indice01 from '../models/cuoc_indice01.js';
 import Ocupacion02 from '../models/cuoc_ocupacion02.js';
 import Conocimiento05 from '../models/cuoc_conocimiento05.js';
 import Denominaciones03 from '../models/cuoc_denominaciones03.js';
+import Funciones04 from '../models/cuoc_funciones04.js';
 
 
 export const resolvers = {
@@ -28,7 +29,8 @@ export const resolvers = {
         const indice = await Indice01.findOne(filter)
           .populate({ path: 'ocupacion', model: Ocupacion02 })
           .populate({ path: 'conocimientos', model: Conocimiento05 })
-          .populate({ path: 'denominaciones', model: Denominaciones03 });
+          .populate({ path: 'denominaciones', model: Denominaciones03 })
+          .populate({ path: 'funciones', model: Funciones04 });
         
       return indice;
       } catch (error) {
@@ -41,13 +43,14 @@ export const resolvers = {
         const indices = await Indice01.find(filter)
           .populate({ path: 'ocupacion', model: Ocupacion02 })
           .populate({ path: 'conocimientos', model: Conocimiento05 })
-          .populate({ path: 'denominaciones', model: Denominaciones03 });
+          .populate({ path: 'denominaciones', model: Denominaciones03 })
+          .populate({ path: 'funciones', model: Funciones04 });
         return indices;
       } catch (error) {
         throw error;
       }
     },
-    oneOcupacion: async (_, { cod_indice }) => {
+    selectOcupacion: async (_, { cod_indice }) => {
       try {
         const ocupacion = await Ocupacion02.findOne({ cod_indice });
         if (ocupacion) {
@@ -66,13 +69,13 @@ export const resolvers = {
         throw new Error(error);
       }
     },
-    oneConocimiento: async (_, { cod_indice }) => {
+    selectConocimiento: async (_, { ocupacion }) => {
       try {
-        const conocimiento = await Conocimiento05.findOne({ cod_indice });
-        if (conocimiento) {
-          return conocimiento
+        const conocimientos = await Conocimiento05.find({ ocupacion });
+        if (conocimientos.length > 0) {
+          return conocimientos
         } else {
-          throw new Error('Conocimiento no encontrada...');
+          throw new Error('Conocimientos no encontrados...');
         }
       } catch (error) {
         throw new Error(error);
@@ -85,13 +88,13 @@ export const resolvers = {
         throw new Error(error);
       }
     },
-    oneDenominacion: async (_, { cod_indice }) => {
+    selectDenominacion: async (_, { ocupacion }) => {
       try {
-        const denominaciones = await Denominaciones03.findOne({ cod_indice });
+        const denominaciones = await Denominaciones03.find({ ocupacion });
         if (denominaciones) {
           return denominaciones
         } else {
-          throw new Error('Denominaciones no encontrada...');
+          throw new Error('Denominaciones no encontradas...');
         }
       } catch (error) {
         throw new Error(error);
@@ -100,6 +103,25 @@ export const resolvers = {
     allDenominaciones: async () => {
       try {
         return await Denominaciones03.find({})
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
+    selectFunciones: async (_, { ocupacion }) => {
+      try {
+        const funciones = await Funciones04.find({ ocupacion });
+        if (funciones) {
+          return funciones
+        } else {
+          throw new Error('Funciones no encontradas...');
+        }
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
+    allFunciones: async () => {
+      try {
+        return await Funciones04.find({})
       } catch (error) {
         throw new Error(error);
       }

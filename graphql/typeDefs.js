@@ -19,6 +19,16 @@ export const typeDefs = gql`
     codigo_ciuo: String
   }
 
+   type Funciones04 {
+    _id: ID!
+    gran_grupo:Int
+    ocupacion:String
+    consecutivo_funcion: String
+    redaccion_funcion: String
+    fuente_ciuo: String
+    fuente_cno: String
+  }
+
   type Conocimiento05 {
     _id: ID!
     gran_grupo:Int
@@ -41,17 +51,20 @@ export const typeDefs = gql`
     ocupacion: Ocupacion02
     conocimientos: [Conocimiento05]
     denominaciones: [Denominaciones03]
+    funciones: [Funciones04]
   }
 
   type Query {
+    filterOcupacion:[Indice01]
     oneIndice(cod_indice: String!): Indice01
     allIndice: [Indice01]
-    oneOcupacion(cod_indice: String): Ocupacion02
+    selectOcupacion(cod_indice: String): Ocupacion02
     allOcupaciones: [Ocupacion02]
-    oneConocimiento(cod_indice: String): Conocimiento05
+    selectConocimiento(ocupacion: String): [Conocimiento05]
     allConocimientos: [Conocimiento05]
-    oneDenominacion(cod_indice: String): Denominaciones03
+    selectDenominacion(ocupacion: String): [Denominaciones03]
     allDenominaciones: [Denominaciones03]
-    filterOcupacion:[Indice01]
+    selectFunciones(ocupacion: String): [Funciones04]
+    allFunciones: [Funciones04]
   }
 `
